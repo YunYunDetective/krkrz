@@ -415,7 +415,8 @@ tTJSCustomObject::tTJSCustomObject(tjs_int hashbits)
 tTJSCustomObject::~tTJSCustomObject()
 {
 	for (auto ci = ClassInstances.rbegin(); ci != ClassInstances.rend(); ci++)
-		(*ci)->Destruct();
+		if (*ci)
+			(*ci)->Destruct();
 	delete [] Symbols;
 	if(TJSObjectHashMapEnabled()) TJSRemoveObjectHashRecord(this);
 }
@@ -451,7 +452,8 @@ void tTJSCustomObject::Finalize(void)
 	}
 
 	for (auto ci = ClassInstances.rbegin(); ci != ClassInstances.rend(); ci++)
-		(*ci)->Invalidate();
+		if (*ci)
+			(*ci)->Invalidate();
 
 	DeleteAllMembers();
 }
